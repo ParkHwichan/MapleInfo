@@ -31,17 +31,17 @@ export default function Page() {
         </p>
 
         <Container>
-            <table>
+            <table className={"w-full"}>
                 <colgroup>
                     <col className={"w-[100px]"}/>
-                    <col className={"*"}/>
+                    <col className={"flex flex-grow"}/>
                 </colgroup>
                 <tbody>
-                <tr>
+                <tr className={"border-b"}>
                     <td>
                         아이템 레벨
                     </td>
-                    <td >
+                    <td className={"pb-4"}>
                         <NumberSelector
                             initialValue={itemLevel}
                             values={
@@ -49,7 +49,7 @@ export default function Page() {
                             } onChange={v => setItemLevel(v)}/>
                     </td>
                 </tr>
-                <tr>
+                <tr className={"border-b"}>
                     <td>
                         목표 스타포스
                     </td>
@@ -61,6 +61,16 @@ export default function Page() {
                             step={1}
 
                         ></RangeSlider>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        강화 옵션
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        강화 비용
                     </td>
                 </tr>
                 </tbody>

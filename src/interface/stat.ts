@@ -50,7 +50,7 @@ export interface Class {
 export const mainClasses: Array<MainClass> = [
     {
         type: "warrior",
-        color: "rgb(255,0,0)",
+        color: "#A02348",
         puzzles: [
             [
                 [1],
@@ -74,7 +74,7 @@ export const mainClasses: Array<MainClass> = [
     },
     {
         type: "magician",
-        color: "rgb(0,0,255)",
+        color: "#268EAE",
         puzzles: [
             [
                 [1],
@@ -98,7 +98,7 @@ export const mainClasses: Array<MainClass> = [
     },
     {
         type: "bowman",
-        color: "rgb(0,255,0)",
+        color: "#6B9C30",
         puzzles: [
             [
                 [1],
@@ -119,7 +119,7 @@ export const mainClasses: Array<MainClass> = [
     },
     {
         type: "thief",
-        color: "rgb(224,0,255)",
+        color: "#75569A",
         puzzles: [
             [
                 [1],
@@ -143,7 +143,7 @@ export const mainClasses: Array<MainClass> = [
     },
     {
         type: "pirate",
-        color: "rgba(144,144,144,0.18)",
+        color: "#827D83",
         puzzles: [
             [
                 [1],

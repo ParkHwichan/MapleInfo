@@ -45,6 +45,7 @@ export default function CharacterAddSelect(
             <input
                 className={"border-2 border-black text-black"}
                 type={"number"}
+                value={level}
                 max={300}
                 min={0}
 

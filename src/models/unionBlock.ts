@@ -2,11 +2,13 @@ import {Stat, UnionCharacter} from "@/interface/stat";
 import {Coordinate} from "@/interface/unionBlock";
 import {Grid} from "@/models/grid";
 import {getAllValidTransforms, getWillBePlacedCoordinates, Transform} from "@/app/lib/transform";
+import {randomUUID} from "crypto";
 
 
 
 export class UnionBlock {
 
+    id : string;
     placedAt?: Coordinate;
     transforms: Array<Transform>;
     character: UnionCharacter;
@@ -27,7 +29,7 @@ export class UnionBlock {
 
         this.character = character;
 
-
+        this.id = crypto.randomUUID();
         this.matrix = this.character.class.type.puzzles[puzzleGrade];
 
         this.transforms = getAllValidTransforms(this.matrix);
@@ -60,8 +62,10 @@ export class UnionBlock {
             const gridCell = newGrid.getBlock(x, y);
             if (gridCell) {
                 gridCell.filled = true;
+                gridCell.filledId = this.id;
                 gridCell.weight = this.character.level;
                 gridCell.color = this.character.class.type.color;
+                gridCell.icon = gridCell.x === coordinate.x && gridCell.y === coordinate.y ? this.character.class.type.type : undefined;
             }
         }
 

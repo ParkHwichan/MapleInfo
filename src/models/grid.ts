@@ -5,8 +5,10 @@ export interface Block {
     x: number;
     y: number;
     filled: boolean;
+    filledId?: string;
     weight: number;
     color?: string;
+    icon?: string;
 }
 
 export interface GridInterface {

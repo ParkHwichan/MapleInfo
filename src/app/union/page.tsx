@@ -9,9 +9,8 @@ import CharacterAddSelect from "@/components/select/characterAddSelect";
 export default function Page() {
 
     const [grid, setGrid] = React.useState<Grid>(new Grid(20));
-    const [selected, setSelected] = React.useState<UnionCharacter | null>(null);
-
-    const [classes, setClasses] = React.useState<UnionCharacter[]>(
+    const [selected, setSelected] = React.useState<UnionBlock | null>(null);
+    const [unionBlocks, setUnionBlocks] = React.useState<UnionBlock[]>(
         [
         ]
     );
@@ -26,27 +25,95 @@ export default function Page() {
                 (character) => {
 
                     const newUnionBlock = new UnionBlock(character);
-                    console.log(newUnionBlock.coordinates);
+                    console.log(newUnionBlock.transforms);
 
-                    setClasses([...classes, character]);
+                    setUnionBlocks([...unionBlocks, newUnionBlock]);
                 }
             }/>
         }
         {
 
             <div>
-                <div>
+                <div className={"flex flex-col"}>
                     {
-                        classes.map((v, i) => {
-                            return <button onClick={
-                                () => {
-                                    setSelected(v);
-                                }
-                            }>
-                                {v.name}
-                            </button>
-                        })
+                        unionBlocks.map((v, i) => {
+                            let leftMin = 999999;
+                            let rightMax = -999999;
+                            let bottomMin = 999999;
+                            let topMax = -999999;
 
+                            v.transforms.forEach((transform) => {
+                                transform.coordinate.map((coordinate) => {
+                                    if(coordinate.x < leftMin) {
+                                        leftMin = coordinate.x;
+                                    }
+                                    if(coordinate.x > rightMax) {
+                                        rightMax = coordinate.x;
+                                    }
+                                    if(coordinate.y < bottomMin) {
+                                        bottomMin = coordinate.y;
+                                    }
+                                    if(coordinate.y > topMax) {
+                                        topMax = coordinate.y;
+                                    }
+                                })
+                            })
+
+                            const width = rightMax - leftMin + 1;
+                            const height = topMax - bottomMin + 1;
+
+
+                            return <div className={"flex flex-col"}>
+                                <button
+                                    key={i}
+                                    onClick={
+                                        () => {
+                                            setSelected(v);
+                                        }
+                                    }>
+                                    {v.character.name}
+                                </button>
+                                {
+                                    <div className={"grid grid-cols-4 gap-2"}>
+                                        {
+                                            v.transforms.map((transform) => {
+                                                return <div className={"flex-col flex"}>
+                                                    {
+                                                        Array.from(Array(height).keys()).map((v, i) => {
+                                                            return <div className={"flex flex-row"}>
+                                                                {
+                                                                    Array.from(Array(width).keys()).map((v, j) => {
+                                                                        const isFilled = transform.coordinate.find((coordinate) => {
+                                                                            return coordinate.x === j + leftMin && coordinate.y === i + bottomMin;
+                                                                        })
+
+
+                                                                        return <div
+                                                                            style={{
+                                                                                backgroundColor: isFilled ? "#ffffff" : "#000000",
+                                                                            }}
+                                                                            className={"w-full aspect-square border"}>
+                                                                            {
+
+                                                                            }
+                                                                        </div>
+                                                                    })
+                                                                }
+                                                            </div>
+                                                        })
+                                                    }
+                                                </div>
+
+                                            })
+                                        }
+                                    </div>
+
+                                }
+
+
+                            </div>
+
+                        })
                     }
                     <button onClick={
                         () => {
@@ -66,31 +133,29 @@ export default function Page() {
                                                     backgroundColor: v.color ? v.color :  v.weight ? "#ffffff" : "#000000",
                                                 }}
                                                 onClick={() => {
-                                                    if(selected) {
-                                                        const unionBlock = new UnionBlock(selected);
 
-                                                        for(let rotate = 0 ; rotate < 4 ; rotate++) {
-                                                            unionBlock.rotated = rotate;
-                                                            for(let reverse = 0; reverse < 2 ; reverse++) {
-                                                                unionBlock.reversed = reverse === 1;
-                                                                if(unionBlock.canPlaceAt(grid, {
+                                                    if(selected) {
+
+                                                        selected.transforms.forEach((transform) => {
+                                                            if(selected.canPlaceAt(grid , {
+                                                                x: v.x,
+                                                                y: v.y
+                                                            }, transform)) {
+
+                                                                const newGrid = selected.placeAt(grid , {
                                                                     x: v.x,
                                                                     y: v.y
-                                                                })) {
-                                                                    const newGrid =  unionBlock.placeAt(grid, {
-                                                                        x: v.x,
-                                                                        y: v.y
-                                                                    }
-                                                                    );
-                                                                    setGrid(newGrid);
-                                                                    return;
-                                                                }
-
+                                                                }, transform);
+                                                                setGrid(newGrid);
+                                                                return;
                                                             }
 
                                                         }
+                                                        )
+
                                                         return;
                                                     }
+
 
 
                                                     console.log(v);

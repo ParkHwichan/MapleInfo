@@ -67,7 +67,6 @@ export class Grid implements GridInterface {
         const left = this.getBlock(block.x - 1, block.y, filled);
         const right = this.getBlock(block.x + 1, block.y, filled);
 
-
         if (top)
             result.set(top.x + "," + top.y, top);
         if (bottom)
@@ -110,6 +109,12 @@ export class Grid implements GridInterface {
         }
     }
 
+    get nextBlock(): Block | null {
+    const availableBlocks = this.getAvailableBlocks();
+            if (availableBlocks.length === 0)
+                return null;
+            return availableBlocks[0];
+    }
 
     checkWeight(coordinate : Coordinate, weight: number, color?: string) {
         const block = this.getBlockByCoordinate(coordinate);
